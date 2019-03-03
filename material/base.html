@@ -17,9 +17,12 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       {% if page and page.meta and page.meta.description %}
-        <meta name="description" content="{{ page.meta.description }}">
+      <meta name="description"
+          content="{{ page.meta.description }}" />
+      {% elif page.meta %}
+      <meta name="description" content="{{ page.meta|striptags|title }}" />
       {% elif config.site_description %}
-        <meta name="description" content="{{ config.site_description }}">
+      <meta name="description" content="{{ config.site_description }}" />
       {% endif %}
       {% if page and page.meta and page.meta.redirect %}
         <script>var anchor=window.location.hash.substr(1);location.href="{{ page.meta.redirect }}"+(anchor?"#"+anchor:"")</script>
