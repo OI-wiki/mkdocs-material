@@ -45,6 +45,8 @@
             content="{{ page.meta.description }}" />
       {% elif config.site_description %}
         <meta name="description" content="{{ config.site_description }}" />
+      {% elif page.meta %}
+        <meta name="description" content="{{ page.meta|striptags|title }}" />
       {% endif %}
 
       <!-- Redirect -->
