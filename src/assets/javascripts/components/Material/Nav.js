@@ -20,9 +20,9 @@
  * IN THE SOFTWARE.
  */
 
-import Blur from "./Nav/Blur"
-import Collapse from "./Nav/Collapse"
-import Scrolling from "./Nav/Scrolling"
+import Blur from './Nav/Blur'
+import Collapse from './Nav/Collapse'
+import Scrolling from './Nav/Scrolling'
 
 /* ----------------------------------------------------------------------------
  * Module

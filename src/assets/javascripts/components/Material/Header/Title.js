@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Title {
-
   /**
    * Swap header title topics when header is scrolled past
    *
@@ -38,20 +37,18 @@ export default class Title {
    * @param {(string|HTMLElement)} el - Selector or HTML element
    * @param {(string|HTMLHeadingElement)} header - Selector or HTML element
    */
-  constructor(el, header) {
-    let ref = (typeof el === "string")
+  constructor (el, header) {
+    let ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
-    if (!(ref instanceof HTMLElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLElement)) { throw new ReferenceError() }
     this.el_ = ref
 
     /* Retrieve header */
-    ref = (typeof header === "string")
+    ref = (typeof header === 'string')
       ? document.querySelector(header)
       : header
-    if (!(ref instanceof HTMLHeadingElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLHeadingElement)) { throw new ReferenceError() }
     this.header_ = ref
 
     /* Initialize state */
@@ -61,8 +58,8 @@ export default class Title {
   /**
    * Setup title state
    */
-  setup() {
-    Array.prototype.forEach.call(this.el_.children, node => {                   // TODO: use childNodes here for IE?
+  setup () {
+    Array.prototype.forEach.call(this.el_.children, node => { // TODO: use childNodes here for IE?
       node.style.width = `${this.el_.offsetWidth - 20}px`
     })
   }
@@ -72,26 +69,24 @@ export default class Title {
    *
    * @param {Event} ev - Event
    */
-  update(ev) {
+  update (ev) {
     const active = window.pageYOffset >= this.header_.offsetTop
-    if (active !== this.active_)
-      this.el_.dataset.mdState = (this.active_ = active) ? "active" : ""
+    if (active !== this.active_) { this.el_.dataset.mdState = (this.active_ = active) ? 'active' : '' }
 
     /* Hack: induce ellipsis on topics */
-    if (ev.type === "resize" || ev.type === "orientationchange") {
+    if (ev.type === 'resize' || ev.type === 'orientationchange') {
       Array.prototype.forEach.call(this.el_.children, node => {
         node.style.width = `${this.el_.offsetWidth - 20}px`
       })
     }
-
   }
 
   /**
    * Reset title state
    */
-  reset() {
-    this.el_.dataset.mdState = ""
-    this.el_.style.width = ""
+  reset () {
+    this.el_.dataset.mdState = ''
+    this.el_.style.width = ''
     this.active_ = false
   }
 }

@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Position {
-
   /**
    * Set sidebars to locked state and limit height to parent node
    *
@@ -41,33 +40,31 @@ export default class Position {
    * @param {(string|HTMLElement)} el - Selector or HTML element
    * @param {(string|HTMLElement)} header - Selector or HTML element
    */
-  constructor(el, header) {
-    let ref = (typeof el === "string")
+  constructor (el, header) {
+    let ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
     if (!(ref instanceof HTMLElement) ||
-        !(ref.parentNode instanceof HTMLElement))
-      throw new ReferenceError
+        !(ref.parentNode instanceof HTMLElement)) { throw new ReferenceError() }
     this.el_ = ref
     this.parent_ = ref.parentNode
 
     /* Retrieve header */
-    ref = (typeof header === "string")
+    ref = (typeof header === 'string')
       ? document.querySelector(header)
       : header
-    if (!(ref instanceof HTMLElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLElement)) { throw new ReferenceError() }
     this.header_ = ref
 
     /* Initialize current height and test whether header is fixed */
     this.height_ = 0
-    this.pad_ = window.getComputedStyle(this.header_).position === "fixed"
+    this.pad_ = window.getComputedStyle(this.header_).position === 'fixed'
   }
 
   /**
    * Initialize sidebar state
    */
-  setup() {
+  setup () {
     const top = Array.prototype.reduce.call(
       this.parent_.children, (offset, child) => {
         return Math.max(offset, child.offsetTop)
@@ -89,13 +86,12 @@ export default class Position {
    *
    * @param {Event?} ev - Event
    */
-  update(ev) {
-    const offset  = window.pageYOffset
+  update (ev) {
+    const offset = window.pageYOffset
     const visible = window.innerHeight
 
     /* Update offset, in case window is resized */
-    if (ev && ev.type === "resize")
-      this.setup()
+    if (ev && ev.type === 'resize') { this.setup() }
 
     /* Set bounds of sidebar container - must be calculated on every run, as
        the height of the content might change due to loading images etc. */
@@ -105,31 +101,29 @@ export default class Position {
     }
 
     /* Calculate new offset and height */
-    const height = visible - bounds.top
-                 - Math.max(0, this.offset_ - offset)
-                 - Math.max(0, offset + visible - bounds.bottom)
+    const height = visible - bounds.top -
+                 Math.max(0, this.offset_ - offset) -
+                 Math.max(0, offset + visible - bounds.bottom)
 
     /* If height changed, update element */
-    if (height !== this.height_)
-      this.el_.style.height = `${this.height_ = height}px`
+    if (height !== this.height_) { this.el_.style.height = `${this.height_ = height}px` }
 
     /* Sidebar should be locked, as we're below parent offset */
     if (offset >= this.offset_) {
-      if (this.el_.dataset.mdState !== "lock")
-        this.el_.dataset.mdState = "lock"
+      if (this.el_.dataset.mdState !== 'lock') { this.el_.dataset.mdState = 'lock' }
 
     /* Sidebar should be unlocked, if locked */
-    } else if (this.el_.dataset.mdState === "lock") {
-      this.el_.dataset.mdState = ""
+    } else if (this.el_.dataset.mdState === 'lock') {
+      this.el_.dataset.mdState = ''
     }
   }
 
   /**
    * Reset locked state and height
    */
-  reset() {
-    this.el_.dataset.mdState = ""
-    this.el_.style.height = ""
+  reset () {
+    this.el_.dataset.mdState = ''
+    this.el_.style.height = ''
     this.height_ = 0
   }
 }

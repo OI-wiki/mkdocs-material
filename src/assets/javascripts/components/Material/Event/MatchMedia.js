@@ -20,14 +20,13 @@
  * IN THE SOFTWARE.
  */
 
-import Listener from "./Listener" // eslint-disable-line no-unused-vars
+import Listener from './Listener' // eslint-disable-line no-unused-vars
 
 /* ----------------------------------------------------------------------------
  * Class
  * ------------------------------------------------------------------------- */
 
 export default class MatchMedia {
-
   /**
    * Media query listener
    *
@@ -41,12 +40,9 @@ export default class MatchMedia {
    * @param {string} query - Media query to test for
    * @param {Listener} listener - Event listener
    */
-  constructor(query, listener) {
+  constructor (query, listener) {
     this.handler_ = mq => {
-      if (mq.matches)
-        listener.listen()
-      else
-        listener.unlisten()
+      if (mq.matches) { listener.listen() } else { listener.unlisten() }
     }
 
     /* Initialize media query listener */

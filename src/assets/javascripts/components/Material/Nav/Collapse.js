@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Collapse {
-
   /**
    * Expand or collapse navigation on toggle
    *
@@ -35,25 +34,24 @@ export default class Collapse {
    *
    * @param {(string|HTMLElement)} el - Selector or HTML element
    */
-  constructor(el) {
-    const ref = (typeof el === "string")
+  constructor (el) {
+    const ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
-    if (!(ref instanceof HTMLElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLElement)) { throw new ReferenceError() }
     this.el_ = ref
   }
 
   /**
    * Initialize overflow and display for accessibility
    */
-  setup() {
+  setup () {
     const current = this.el_.getBoundingClientRect().height
 
     /* Hidden links should not be focusable, so hide them when the navigation
        is collapsed and set overflow so the outline is not cut off */
-    this.el_.style.display  = current ? "block"   : "none"
-    this.el_.style.overflow = current ? "visible" : "hidden"
+    this.el_.style.display = current ? 'block' : 'none'
+    this.el_.style.overflow = current ? 'visible' : 'hidden'
   }
 
   /**
@@ -63,34 +61,34 @@ export default class Collapse {
    * which results in the menu not expanding or collapsing properly. THerefore,
    * for reasons of compatibility, the attribute accessors are used.
    */
-  update() {
+  update () {
     const current = this.el_.getBoundingClientRect().height
 
     /* Reset overflow to CSS defaults */
-    this.el_.style.display  = "block"
-    this.el_.style.overflow = ""
+    this.el_.style.display = 'block'
+    this.el_.style.overflow = ''
 
     /* Expanded, so collapse */
     if (current) {
       this.el_.style.maxHeight = `${current}px`
       requestAnimationFrame(() => {
-        this.el_.setAttribute("data-md-state", "animate")
-        this.el_.style.maxHeight = "0px"
+        this.el_.setAttribute('data-md-state', 'animate')
+        this.el_.style.maxHeight = '0px'
       })
 
     /* Collapsed, so expand */
     } else {
-      this.el_.setAttribute("data-md-state", "expand")
-      this.el_.style.maxHeight = ""
+      this.el_.setAttribute('data-md-state', 'expand')
+      this.el_.style.maxHeight = ''
 
       /* Read height and unset pseudo-toggled state */
       const height = this.el_.getBoundingClientRect().height
-      this.el_.removeAttribute("data-md-state")
+      this.el_.removeAttribute('data-md-state')
 
       /* Set initial state and animate */
-      this.el_.style.maxHeight = "0px"
+      this.el_.style.maxHeight = '0px'
       requestAnimationFrame(() => {
-        this.el_.setAttribute("data-md-state", "animate")
+        this.el_.setAttribute('data-md-state', 'animate')
         this.el_.style.maxHeight = `${height}px`
       })
     }
@@ -98,31 +96,30 @@ export default class Collapse {
     /* Remove state on end of transition */
     const end = ev => {
       const target = ev.target
-      if (!(target instanceof HTMLElement))
-        throw new ReferenceError
+      if (!(target instanceof HTMLElement)) { throw new ReferenceError() }
 
       /* Reset height and state */
-      target.removeAttribute("data-md-state")
-      target.style.maxHeight = ""
+      target.removeAttribute('data-md-state')
+      target.style.maxHeight = ''
 
       /* Hidden links should not be focusable, so hide them when the navigation
          is collapsed and set overflow so the outline is not cut off */
-      target.style.display  = current ? "none"   : "block"
-      target.style.overflow = current ? "hidden" : "visible"
+      target.style.display = current ? 'none' : 'block'
+      target.style.overflow = current ? 'hidden' : 'visible'
 
       /* Only fire once, so directly remove event listener */
-      target.removeEventListener("transitionend", end)
+      target.removeEventListener('transitionend', end)
     }
-    this.el_.addEventListener("transitionend", end, false)
+    this.el_.addEventListener('transitionend', end, false)
   }
 
   /**
    * Reset height and pseudo-toggled state
    */
-  reset() {
-    this.el_.dataset.mdState = ""
-    this.el_.style.maxHeight = ""
-    this.el_.style.display   = ""
-    this.el_.style.overflow  = ""
+  reset () {
+    this.el_.dataset.mdState = ''
+    this.el_.style.maxHeight = ''
+    this.el_.style.display = ''
+    this.el_.style.overflow = ''
   }
 }

@@ -20,8 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-import Listener from "./Event/Listener"
-import MatchMedia from "./Event/MatchMedia"
+import Listener from './Event/Listener'
+import MatchMedia from './Event/MatchMedia'
 
 /* ----------------------------------------------------------------------------
  * Module

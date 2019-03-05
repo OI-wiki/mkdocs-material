@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Blur {
-
   /**
    * Blur links within the table of contents above current page y-offset
    *
@@ -39,8 +38,8 @@ export default class Blur {
    *
    * @param {(string|NodeList<HTMLElement>)} els - Selector or HTML elements
    */
-  constructor(els) {
-    this.els_ = (typeof els === "string")
+  constructor (els) {
+    this.els_ = (typeof els === 'string')
       ? document.querySelectorAll(els)
       : els
 
@@ -61,7 +60,7 @@ export default class Blur {
   /**
    * Initialize blur states
    */
-  setup() {
+  setup () {
     this.update()
   }
 
@@ -71,27 +70,26 @@ export default class Blur {
    * Deduct the static offset of the header (56px) and sidebar offset (24px),
    * see _permalinks.scss for more information.
    */
-  update() {
+  update () {
     const offset = window.pageYOffset
     const dir = this.offset_ - offset < 0
 
     /* Hack: reset index if direction changed to catch very fast scrolling,
        because otherwise we would have to register a timer and that sucks */
-    if (this.dir_ !== dir)
+    if (this.dir_ !== dir) {
       this.index_ = dir
         ? this.index_ = 0
         : this.index_ = this.els_.length - 1
+    }
 
     /* Exit when there are no anchors */
-    if (this.anchors_.length === 0)
-      return
+    if (this.anchors_.length === 0) { return }
 
     /* Scroll direction is down */
     if (this.offset_ <= offset) {
       for (let i = this.index_ + 1; i < this.els_.length; i++) {
         if (this.anchors_[i].offsetTop - (56 + 24) <= offset) {
-          if (i > 0)
-            this.els_[i - 1].dataset.mdState = "blur"
+          if (i > 0) { this.els_[i - 1].dataset.mdState = 'blur' }
           this.index_ = i
         } else {
           break
@@ -102,8 +100,7 @@ export default class Blur {
     } else {
       for (let i = this.index_; i >= 0; i--) {
         if (this.anchors_[i].offsetTop - (56 + 24) > offset) {
-          if (i > 0)
-            this.els_[i - 1].dataset.mdState = ""
+          if (i > 0) { this.els_[i - 1].dataset.mdState = '' }
         } else {
           this.index_ = i
           break
@@ -119,13 +116,13 @@ export default class Blur {
   /**
    * Reset blur states
    */
-  reset() {
+  reset () {
     Array.prototype.forEach.call(this.els_, el => {
-      el.dataset.mdState = ""
+      el.dataset.mdState = ''
     })
 
     /* Reset index and page y-offset */
-    this.index_  = 0
+    this.index_ = 0
     this.offset_ = window.pageYOffset
   }
 }

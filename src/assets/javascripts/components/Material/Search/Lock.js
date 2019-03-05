@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Lock {
-
   /**
    * Lock body for full-screen search modal
    *
@@ -37,32 +36,29 @@ export default class Lock {
    *
    * @param {(string|HTMLElement)} el - Selector or HTML element
    */
-  constructor(el) {
-    const ref = (typeof el === "string")
+  constructor (el) {
+    const ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
-    if (!(ref instanceof HTMLInputElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLInputElement)) { throw new ReferenceError() }
     this.el_ = ref
 
     /* Retrieve element to lock (= body) */
-    if (!document.body)
-      throw new ReferenceError
+    if (!document.body) { throw new ReferenceError() }
     this.lock_ = document.body
   }
 
   /**
    * Setup locked state
    */
-  setup() {
+  setup () {
     this.update()
   }
 
   /**
    * Update locked state
    */
-  update() {
-
+  update () {
     /* Entering search mode */
     if (this.el_.checked) {
       this.offset_ = window.pageYOffset
@@ -73,19 +69,18 @@ export default class Lock {
 
         /* Lock body after finishing transition */
         if (this.el_.checked) {
-          this.lock_.dataset.mdState = "lock"
+          this.lock_.dataset.mdState = 'lock'
         }
       }, 400)
 
     /* Exiting search mode */
     } else {
-      this.lock_.dataset.mdState = ""
+      this.lock_.dataset.mdState = ''
 
       /* Scroll to former position, but wait for 100ms to prevent flashes on
          iOS. A short timeout seems to do the trick */
       setTimeout(() => {
-        if (typeof this.offset_ !== "undefined")
-          window.scrollTo(0, this.offset_)
+        if (typeof this.offset_ !== 'undefined') { window.scrollTo(0, this.offset_) }
       }, 100)
     }
   }
@@ -93,9 +88,8 @@ export default class Lock {
   /**
    * Reset locked state and page y-offset
    */
-  reset() {
-    if (this.lock_.dataset.mdState === "lock")
-      window.scrollTo(0, this.offset_)
-    this.lock_.dataset.mdState = ""
+  reset () {
+    if (this.lock_.dataset.mdState === 'lock') { window.scrollTo(0, this.offset_) }
+    this.lock_.dataset.mdState = ''
   }
 }

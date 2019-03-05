@@ -1,15 +1,3 @@
-function delay(callback, ms) {
-  var timer = 0;
-  return function() {
-    var context = this,
-      args = arguments;
-    clearTimeout(timer);
-    timer = setTimeout(function() {
-      callback.apply(context, args);
-    }, ms || 0);
-  };
-}
-
 /*
  * Copyright (c) 2016-2019 Martin Donath <martin.donath@squidfunk.com>
  *
@@ -32,7 +20,19 @@ function delay(callback, ms) {
  * IN THE SOFTWARE.
  */
 
-import escape from "escape-string-regexp";
+import escape from 'escape-string-regexp'
+
+function delay (callback, ms) {
+  let timer = 0
+  return function () {
+    const context = this
+    const args = arguments
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      callback.apply(context, args)
+    }, ms || 0)
+  }
+}
 // import lunr from "expose-loader?lunr!lunr";
 
 /* ----------------------------------------------------------------------------
@@ -52,11 +52,11 @@ import escape from "escape-string-regexp";
  * @return {string} Escaped HTML string
  */
 const escapeHTML = html => {
-  var text = document.createTextNode(html);
-  var p = document.createElement("p");
-  p.appendChild(text);
-  return p.innerHTML;
-};
+  const text = document.createTextNode(html)
+  const p = document.createElement('p')
+  p.appendChild(text)
+  return p.innerHTML
+}
 
 /**
  * Truncate a string after the given number of character
@@ -70,15 +70,15 @@ const escapeHTML = html => {
  * @return {string} Truncated string
  */
 const truncate = (string, n) => {
-  let i = n;
+  let i = n
   if (string.length > i) {
-    while (string[i] !== " " && --i > 0);
-    return `${string.substring(0, i)}...`;
+    while (string[i] !== ' ' && --i > 0);
+    return `${string.substring(0, i)}...`
   }
-  return string;
-};
+  return string
+}
 
-let lis;
+let lis
 
 /**
  * Return the meta tag value for the given key
@@ -88,10 +88,10 @@ let lis;
  * @return {string} Meta content value
  */
 const translate = key => {
-  const meta = document.getElementsByName(`lang:${key}`)[0];
-  if (!(meta instanceof HTMLMetaElement)) throw new ReferenceError();
-  return meta.content;
-};
+  const meta = document.getElementsByName(`lang:${key}`)[0]
+  if (!(meta instanceof HTMLMetaElement)) throw new ReferenceError()
+  return meta.content
+}
 
 /* ----------------------------------------------------------------------------
  * Class
@@ -118,30 +118,31 @@ export default class Result {
    * @param {(Array<Object>|Function)} data - Function providing data or array
    */
 
-  constructor(el, data) {
-    const ref = typeof el === "string" ? document.querySelector(el) : el;
-    if (!(ref instanceof HTMLElement)) throw new ReferenceError();
-    this.el_ = ref;
+  constructor (el, data) {
+    const ref = typeof el === 'string' ? document.querySelector(el) : el
+    if (!(ref instanceof HTMLElement)) throw new ReferenceError()
+    this.el_ = ref
 
     /* Retrieve metadata and list element */
-    const [meta, list] = Array.prototype.slice.call(this.el_.children);
+    const [meta, list] = Array.prototype.slice.call(this.el_.children)
 
     /* Set data, metadata and list elements */
-    this.data_ = null;
-    this.meta_ = meta;
-    lis = list;
+    this.data_ = null
+    this.meta_ = meta
+    lis = list
     this.state = {
-      ev: ""
-    };
+      ev: ''
+    }
+
     /* Load messages for metadata display */
     this.message_ = {
       placeholder: this.meta_.textContent,
-      none: translate("search.result.none"),
-      one: translate("search.result.one"),
-      other: translate("search.result.other")
-    };
-    this.update = this.update.bind(this);
-    this.triggerChange = this.triggerChange.bind(this);
+      none: translate('search.result.none'),
+      one: translate('search.result.one'),
+      other: translate('search.result.other')
+    }
+    this.update = this.update.bind(this)
+    this.triggerChange = this.triggerChange.bind(this)
   }
 
   /**
@@ -149,45 +150,45 @@ export default class Result {
    *
    * @param {Event} ev - Input or focus event
    */
-  update(ev) {
+  update (ev) {
     /* Initialize index, if this has not be done yet */
-    if (ev.type === "focus" || ev.type === "keyup") {
-      clearTimeout(this.timer);
+    if (ev.type === 'focus' || ev.type === 'keyup') {
+      clearTimeout(this.timer)
       // console.log(this);
-      this.state = { ev: ev };
-      this.timer = setTimeout(this.triggerChange, 500);
+      this.state = { ev }
+      this.timer = setTimeout(this.triggerChange, 500)
     }
   }
-  triggerChange(w) {
+  triggerChange (w) {
     // delay(e => {
-    const { ev } = this.state;
+    const { ev } = this.state
     // console.log(this.state, ev);
-    const target = ev.target;
-    if (!(target instanceof HTMLInputElement)) throw new ReferenceError();
+    const target = ev.target
+    if (!(target instanceof HTMLInputElement)) throw new ReferenceError()
 
     /* Abort early, if index is not build or input hasn't changed */
-    if (target.value === this.value_) return;
+    if (target.value === this.value_) return
 
     /* Clear current list */
-    while (lis.firstChild) lis.removeChild(lis.firstChild);
+    while (lis.firstChild) lis.removeChild(lis.firstChild)
 
     /* Abort early, if search input is empty */
-    this.value_ = target.value;
-    let Q = this.value_;
+    this.value_ = target.value
+    const Q = this.value_
     if (this.value_.length === 0) {
-      this.meta_.textContent = this.message_.placeholder;
-      return;
+      this.meta_.textContent = this.message_.placeholder
+      return
     }
 
     /* Perform search on index and group sections by document */
-    let sta = [],
-      Rsize;
+    let sta = []
+    let Rsize
     const result = fetch(`https://search.oi-wiki.org/?s=${Q}`, {
-      credentials: "same-origin"
+      credentials: 'same-origin'
     })
       .then(response => response.json())
       .then(result => {
-        Rsize = result.length;
+        Rsize = result.length
         // console.log(Rsize);
         result.forEach(item => {
           /* Render article */
@@ -220,68 +221,66 @@ export default class Result {
                 </article>
               </a>
             </li>
-          );
+          )
 
           /* Push articles and section renderers onto stack */
-          sta.push(() => lis.appendChild(article));
+          sta.push(() => lis.appendChild(article))
           // console.log(lis);
-        });
+        })
         // console.log(result);
         /* Reset stack and render results */
 
         /* Gradually add results as long as the height of the container grows */
-        const container = this.el_.parentNode;
-        if (!(container instanceof HTMLElement)) throw new ReferenceError();
+        const container = this.el_.parentNode
+        if (!(container instanceof HTMLElement)) throw new ReferenceError()
         while (
           sta.length
           // &&
           // container.offsetHeight >= container.scrollHeight - 16
-        )
-          sta.shift()();
+        ) { sta.shift()() }
 
         /* Bind click handlers for anchors */
-        const anchors = lis.querySelectorAll("[data-md-rel=anchor]");
+        const anchors = lis.querySelectorAll('[data-md-rel=anchor]')
         Array.prototype.forEach.call(anchors, anchor => {
-          ["click", "keydown"].forEach(action => {
+          ['click', 'keydown'].forEach(action => {
             anchor.addEventListener(action, ev2 => {
-              if (action === "keydown" && ev2.keyCode !== 13) return;
+              if (action === 'keydown' && ev2.keyCode !== 13) return
 
               /* Close search */
-              const toggle = document.querySelector("[data-md-toggle=search]");
-              if (!(toggle instanceof HTMLInputElement))
-                throw new ReferenceError();
+              const toggle = document.querySelector('[data-md-toggle=search]')
+              if (!(toggle instanceof HTMLInputElement)) { throw new ReferenceError() }
               if (toggle.checked) {
-                toggle.checked = false;
-                toggle.dispatchEvent(new CustomEvent("change"));
+                toggle.checked = false
+                toggle.dispatchEvent(new CustomEvent('change'))
               }
 
               /* Hack: prevent default, as the navigation needs to be delayed due
                    to the search body lock on mobile */
-              ev2.preventDefault();
+              ev2.preventDefault()
               setTimeout(() => {
-                document.location.href = anchor.href;
-              }, 100);
-            });
-          });
-        });
+                document.location.href = anchor.href
+              }, 100)
+            })
+          })
+        })
         // console.log(result.length);
         // console.log(result);
         /* Update search metadata */
         switch (result.length) {
           case 0:
-            this.meta_.textContent = this.message_.none;
-            break;
+            this.meta_.textContent = this.message_.none
+            break
           case 1:
-            this.meta_.textContent = this.message_.one;
-            break;
+            this.meta_.textContent = this.message_.one
+            break
           default:
             this.meta_.textContent = this.message_.other.replace(
-              "#",
+              '#',
               result.length
-            );
+            )
         }
-        return result;
-      });
+        return result
+      })
 
     // }, 500);
   }

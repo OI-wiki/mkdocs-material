@@ -35,22 +35,22 @@
  *   children - Child nodes
  * @return {HTMLElement} Native DOM node
  */
-export function createElement(tag, properties, ...children) {
+export function createElement (tag, properties, ...children) {
   const el = document.createElement(tag)
 
   /* Set all properties */
-  if (properties)
+  if (properties) {
     Array.prototype.forEach.call(Object.keys(properties), attr => {
       el.setAttribute(attr, properties[attr])
     })
+  }
 
   /* Iterate child nodes */
   const iterateChildNodes = nodes => {
     Array.prototype.forEach.call(nodes, node => {
-
       /* Directly append text content */
-      if (typeof node === "string" ||
-          typeof node === "number") {
+      if (typeof node === 'string' ||
+          typeof node === 'number') {
         el.textContent += node
 
       /* Recurse, if we got an array */
@@ -58,7 +58,7 @@ export function createElement(tag, properties, ...children) {
         iterateChildNodes(node)
 
       /* Append raw HTML */
-      } else if (typeof node.__html !== "undefined") {
+      } else if (typeof node.__html !== 'undefined') {
         el.innerHTML += node.__html
 
       /* Append regular nodes */

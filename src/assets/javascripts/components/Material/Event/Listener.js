@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Listener {
-
   /**
    * Generic event listener
    *
@@ -41,14 +40,14 @@ export default class Listener {
    * @param {(string|Array<string>)} events - Event names
    * @param {(Object|Function)} handler - Handler to be invoked
    */
-  constructor(els, events, handler) {
+  constructor (els, events, handler) {
     this.els_ = Array.prototype.slice.call(
-      (typeof els === "string")
+      (typeof els === 'string')
         ? document.querySelectorAll(els)
         : [].concat(els))
 
     /* Set handler as function or directly as object */
-    this.handler_ = typeof handler === "function"
+    this.handler_ = typeof handler === 'function'
       ? { update: handler }
       : handler
 
@@ -60,7 +59,7 @@ export default class Listener {
   /**
    * Register listener for all relevant events
    */
-  listen() {
+  listen () {
     this.els_.forEach(el => {
       this.events_.forEach(event => {
         el.addEventListener(event, this.update_, false)
@@ -68,14 +67,13 @@ export default class Listener {
     })
 
     /* Execute setup handler, if implemented */
-    if (typeof this.handler_.setup === "function")
-      this.handler_.setup()
+    if (typeof this.handler_.setup === 'function') { this.handler_.setup() }
   }
 
   /**
    * Unregister listener for all relevant events
    */
-  unlisten() {
+  unlisten () {
     this.els_.forEach(el => {
       this.events_.forEach(event => {
         el.removeEventListener(event, this.update_)
@@ -83,7 +81,6 @@ export default class Listener {
     })
 
     /* Execute reset handler, if implemented */
-    if (typeof this.handler_.reset === "function")
-      this.handler_.reset()
+    if (typeof this.handler_.reset === 'function') { this.handler_.reset() }
   }
 }

@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Toggle {
-
   /**
    * Toggle tabs visibility depending on page y-offset
    *
@@ -37,12 +36,11 @@ export default class Toggle {
    *
    * @param {(string|HTMLElement)} el - Selector or HTML element
    */
-  constructor(el) {
-    const ref = (typeof el === "string")
+  constructor (el) {
+    const ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
-    if (!(ref instanceof Node))
-      throw new ReferenceError
+    if (!(ref instanceof Node)) { throw new ReferenceError() }
     this.el_ = ref
 
     /* Initialize offset and state */
@@ -52,18 +50,17 @@ export default class Toggle {
   /**
    * Update visibility
    */
-  update() {
+  update () {
     const active = window.pageYOffset >=
-      this.el_.children[0].offsetTop + (5 - 48)                                 // TODO: quick hack to enable same handling for hero
-    if (active !== this.active_)
-      this.el_.dataset.mdState = (this.active_ = active) ? "hidden" : ""
+      this.el_.children[0].offsetTop + (5 - 48) // TODO: quick hack to enable same handling for hero
+    if (active !== this.active_) { this.el_.dataset.mdState = (this.active_ = active) ? 'hidden' : '' }
   }
 
   /**
    * Reset visibility
    */
-  reset() {
-    this.el_.dataset.mdState = ""
+  reset () {
+    this.el_.dataset.mdState = ''
     this.active_ = false
   }
 }

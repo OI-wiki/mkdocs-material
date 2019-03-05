@@ -25,7 +25,6 @@
  * ------------------------------------------------------------------------- */
 
 export default class Shadow {
-
   /**
    * Show or hide header shadow depending on page y-offset
    *
@@ -39,21 +38,19 @@ export default class Shadow {
    * @param {(string|HTMLElement)} el - Selector or HTML element
    * @param {(string|HTMLElement)} header - Selector or HTML element
    */
-  constructor(el, header) {
-    let ref = (typeof el === "string")
+  constructor (el, header) {
+    let ref = (typeof el === 'string')
       ? document.querySelector(el)
       : el
     if (!(ref instanceof HTMLElement) ||
-        !(ref.parentNode instanceof HTMLElement))
-      throw new ReferenceError
+        !(ref.parentNode instanceof HTMLElement)) { throw new ReferenceError() }
     this.el_ = ref.parentNode
 
     /* Retrieve header */
-    ref = (typeof header === "string")
+    ref = (typeof header === 'string')
       ? document.querySelector(header)
       : header
-    if (!(ref instanceof HTMLElement))
-      throw new ReferenceError
+    if (!(ref instanceof HTMLElement)) { throw new ReferenceError() }
     this.header_ = ref
 
     /* Initialize height and state */
@@ -64,11 +61,10 @@ export default class Shadow {
   /**
    * Calculate total height of previous nodes
    */
-  setup() {
+  setup () {
     let current = this.el_
     while ((current = current.previousElementSibling)) {
-      if (!(current instanceof HTMLElement))
-        throw new ReferenceError
+      if (!(current instanceof HTMLElement)) { throw new ReferenceError() }
       this.height_ += current.offsetHeight
     }
     this.update()
@@ -79,22 +75,21 @@ export default class Shadow {
    *
    * @param {Event} ev - Event
    */
-  update(ev) {
-    if (ev && (ev.type === "resize" || ev.type === "orientationchange")) {
+  update (ev) {
+    if (ev && (ev.type === 'resize' || ev.type === 'orientationchange')) {
       this.height_ = 0
       this.setup()
     } else {
       const active = window.pageYOffset >= this.height_
-      if (active !== this.active_)
-        this.header_.dataset.mdState = (this.active_ = active) ? "shadow" : ""
+      if (active !== this.active_) { this.header_.dataset.mdState = (this.active_ = active) ? 'shadow' : '' }
     }
   }
 
   /**
    * Reset shadow state
    */
-  reset() {
-    this.header_.dataset.mdState = ""
+  reset () {
+    this.header_.dataset.mdState = ''
     this.height_ = 0
     this.active_ = false
   }
