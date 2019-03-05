@@ -43,8 +43,6 @@
       {% if page and page.meta and page.meta.description %}
         <meta name="description"
             content="{{ page.meta.description }}" />
-      {% elif page.meta %}
-        <meta name="description" content="{{ page.meta|striptags|title }}" />
       {% elif config.site_description %}
         <meta name="description" content="{{ config.site_description }}" />
       {% endif %}
