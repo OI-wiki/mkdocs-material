@@ -17,22 +17,52 @@
 {% set pageID = page.title | default("404", true) %}
 <h2 id="__comments" data-no-instant>{{ lang.t("meta.comments") }}</h2>
 <form id="gitalk-form" onsubmit="return!1" data-no-instant>
-<div id="gitalk-container" data-no-instant>
-</div>
+<div id="gitalk-container" data-no-instant>评论加载中 ...</div>
 </form>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/OI-wiki/gitalk@master/dist/gitalk.css">
-<script src="https://cdn.jsdelivr.net/gh/OI-wiki/gitalk@master/dist/gitalk.min.js"></script>
+
 <script>
-  const gitalk = new Gitalk({
-    id: '{{ page.title | default("404", true)  }}',
-    owner: 'OI-wiki',
-    repo: 'gitment',
-    admin: ['Ir1d', 'cjsoft', 'TrisolarisHD', 'Xeonacid', 'sshwy'],
-    clientID: 'd6a911c8fba0194626d4',
-    clientSecret: '867ec7e13cc99b420bd147cbb62d5cfec271ba81',
-    distractionFreeMode: false,
-    pagerDirection: 'first'
-  })
-  gitalk.render('gitalk-container')
+/* Lazyload Gitalk | Sukka | <https://skk.moe> */
+// Based on: https://blog.skk.moe/post/prevent-disqus-from-slowing-your-site/
+
+(function (window, document, navigator) {
+  function loadGitalk() {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/gh/OI-wiki/gitalk@master/dist/gitalk.min.js';
+    (document.head || document.body).appendChild(s);
+    s.onload = function () {
+      const gitalk = new Gitalk({
+        id: '{{ page.title | default("404", true)  }}',
+        owner: 'OI-wiki',
+        repo: 'gitment',
+        admin: ['Ir1d', 'cjsoft', 'TrisolarisHD', 'Xeonacid', 'sshwy'],
+        clientID: 'd6a911c8fba0194626d4',
+        clientSecret: '867ec7e13cc99b420bd147cbb62d5cfec271ba81',
+        distractionFreeMode: false,
+        pagerDirection: 'first'
+      });
+      gitalk.render('gitalk-container');
+    };
+  }
+
+  var runningOnBrowser = typeof window !== 'undefined';
+  var isBot = runningOnBrowser && !("onscroll" in window) || typeof navigator !== 'undefined' && /(gle|ing|ro|msn)bot|crawl|spider|yand|duckgo/i.test(navigator.userAgent);
+  var supportsIntersectionObserver = runningOnBrowser && "IntersectionObserver" in window;
+
+  setTimeout(function () {
+    if (!isBot && supportsIntersectionObserver) {
+      var gitalk_observer = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+          loadGitalk();
+          gitalk_observer.disconnect();
+        }
+      }, { threshold: [0] });
+      gitalk_observer.observe(document.getElementById('gitalk-container'));
+    } else {
+      loadGitalk();
+    }
+  }, 1);
+})(window, document, navigator);
+
 </script>
 {% endif %}
