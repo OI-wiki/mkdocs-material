@@ -15,7 +15,7 @@
 {% if not page.is_homepage and disqus %}
 {% set pageID = page.title | default("404", true) %}
 <div class="giscus" data-no-instant></div>
-{% ifequal config.theme.language 'zh' %}
+{% if config.theme.language == 'zh' %}
   <script src="https://giscus.app/client.js"
           data-repo="OI-wiki/gitment"
           data-repo-id="MDEwOlJlcG9zaXRvcnkxNDQzODg5NjU="
@@ -51,5 +51,5 @@
           crossorigin="anonymous"
           async>
   </script>
-{% endifequal %}
+{% endif %}
 {% endif %}
