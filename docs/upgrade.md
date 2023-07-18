@@ -882,7 +882,7 @@ matches the new structure:
     -      {% if font != false %}
     +      {% if config.theme.font != false %}
     +        {% set font = config.theme.font %}
-             <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+             <link href="https://gstatic.loli.net" rel="preconnect" crossorigin />
              <link
               rel="stylesheet"
     @@ -169,8 +151,12 @@
@@ -1215,8 +1215,8 @@ matches the new structure:
          {% endblock %}
          {% block fonts %}
            {% if font != false %}
-             <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-             <link rel="stylesheet" href="https://fonts.googleapis.com/css?family={{
+             <link href="https://gstatic.loli.net" rel="preconnect" crossorigin>
+             <link rel="stylesheet" href="https://fonts.loli.net/css?family={{
                  font.text | replace(' ', '+') + ':300,400,400i,700%7C' +
                  font.code | replace(' ', '+')
                }}&display=fallback">

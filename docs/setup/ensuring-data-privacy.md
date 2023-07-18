@@ -364,8 +364,8 @@ removed during the build process.
     .
     └─ assets/external/
        ├─ unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
-       ├─ fonts.googleapis.com/css
-       ├─ fonts.gstatic.com/s/
+       ├─ fonts.loli.net/css
+       ├─ gstatic.loli.net/s/
        │  ├─ roboto/v29/
        │  │  ├─ KFOjCnqEu92Fr1Mu51TjASc-CsTKlA.woff2
        │  │  ├─ KFOjCnqEu92Fr1Mu51TjASc0CsTKlA.woff2
