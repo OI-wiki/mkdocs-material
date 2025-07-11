@@ -50,6 +50,7 @@
         {% set icon = config.theme.icon.search or "material/magnify" %}
         {% include ".icons/" ~ icon ~ ".svg" %}
       </label>
+      {% include "partials/search.html" %}
     {% endif %}
     {% if config.repo_url %}
       <div class="md-header__source">

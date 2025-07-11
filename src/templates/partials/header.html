@@ -95,6 +95,9 @@
         {% set icon = config.theme.icon.search or "material/magnify" %}
         {% include ".icons/" ~ icon ~ ".svg" %}
       </label>
+
+      <!-- Search interface -->
+      {% include "partials/search.html" %}
     {% endif %}
 
     <!-- Repository information -->
